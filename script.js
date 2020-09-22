@@ -20,16 +20,52 @@ window.addEventListener("load", function() {
            alert("Fuel Level and Cargo Mass inputs must be numbers");
            event.preventDefault();
        }
+       let faultyItems = document.querySelector("#faultyItems");
+       let fuelStatus = document.getElementById("fuelStatus");
+       let launchStatus = document.getElementById("launchStatus");
+       let cargoMassStatus =document.getElementById("cargoStatus");
        if (fuelLevelInput.value < 10000){
-        let faultyItems = document.querySelector("#faultyItems");
-        faultyItems.style.visibility = "visible";
-        document.getElementById("fuelStatus").style.color ="red";
-        document.getElementById("fuelStatus").innerHTML = "Shuttle not ready for launch";
-        event.preventDefault();
+           faultyItems.style.visibility = "visible";
+           launchStatus.style.color = "red";
+           launchStatus.innerHTML = "Shuttle not ready for launch";
+           fuelStatus.innerHTML = "Not enough fuel for launch"
+           event.preventDefault();
        }
+       if (cargoMassInput.value > 10000){
+           faultyItems.style.visibility = "visible";
+           launchStatus.style.color = "red";
+           launchStatus.innerHTML = "Shuttle not ready for launch";
+           cargoMassStatus.innerHTML = "Too much cargo mass for launch";
+           event.preventDefault();
+       }
+       if (fuelLevelInput.value >= 10000 & cargoMassStatus.value <= 10000){
+        faultyItems.style.visibility = "visible";
+        launchStatus.style.color = "green";
+        launchStatus.innerHTML = "Shuttle is ready for launch";
+        event.preventDefault();
+   }
        event.preventDefault();
    });
 });
+window.addEventListener("load",function() {
+   fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response){
+       response.json().then(function(json){
+           const div = document.getElementById("missionTarget");
+           div.innerHTML =`
+                <h2>Mission Destination</h2>
+                <ol>
+                    <li>Name: ${json[2].name}</li>
+                    <li>Diameter: ${json[2].diameter}</li>
+                    <li>Star: ${json[2].star}</li>
+                    <li>Distance from Earth: ${json[2].distance}</li>
+                    <li>Number of Moons: ${json[2].moons}</li>
+                </ol>
+                <img src="${json[2].image}">
+            `;
+       });
+   });
+});
+
 /* This block of code shows how to format the HTML once you fetch some planetary JSON!
 <h2>Mission Destination</h2>
 <ol>
